@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.3225205161674343,
-      "y": 0.3225205161674343,
+      "x": 0.44964739475579407,
+      "y": 0.44964739475579407,
       "z": 1
     },
     "_quat": {
@@ -73,7 +73,7 @@
     "_level": 0,
     "_components": [
       {
-        "__id__": 11
+        "__id__": 12
       }
     ],
     "_prefab": null,
@@ -144,7 +144,7 @@
     "_level": 1,
     "_components": [
       {
-        "__id__": 10
+        "__id__": 11
       }
     ],
     "_prefab": null,
@@ -384,6 +384,9 @@
     "_components": [
       {
         "__id__": 9
+      },
+      {
+        "__id__": 10
       }
     ],
     "_prefab": null,
@@ -459,6 +462,20 @@
     "_state": 0,
     "_atlas": null,
     "_id": "015VOSE21P37YJhQ0E/SSP"
+  },
+  {
+    "__type__": "13e02RZTBRAlKM+RIf9Lzaz",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 8
+    },
+    "_enabled": true,
+    "jumpHeight": 200,
+    "jumpDuration": 0.3,
+    "maxMoveSpeed": 400,
+    "accel": 350,
+    "_id": "e94smcATNBFoyrcWPwFz7d"
   },
   {
     "__type__": "cc.Camera",
