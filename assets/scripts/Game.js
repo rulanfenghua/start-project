@@ -41,14 +41,28 @@ cc.Class({
     player: {
       default: null,
       type: cc.Node
+    },
+
+    scoreDisplay: {
+      default: null,
+      type: cc.Label
+    },
+    scoreAudio: {
+      default: null,
+      type: cc.AudioClip
     }
   },
 
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
+    this.timer = 0
+    this.starDuration = 0
+
     this.groundY = this.ground.y + this.ground.height / 2
     this.spawnNewStar()
+
+    this.score = 0
   },
 
   // 生成星星
@@ -56,6 +70,9 @@ cc.Class({
     var newStar = cc.instantiate(this.starPrefab)
     this.node.addChild(newStar)
     newStar.setPosition(this.getNewStarPosition())
+
+    this.starDuration = this.minStarDuration + Math.random() * (this.maxStarDuration - this.minStarDuration)
+    this.timer = 0
 
     newStar.getComponent('Star').game = this
   },
@@ -70,7 +87,25 @@ cc.Class({
 
   start() {
 
-  }
+  },
 
-  // update (dt) {},
+  update(dt) {
+    if (this.timer > this.starDuration) {
+      this.gameOver()
+      return
+    }
+
+    this.timer += dt
+  },
+
+  gainScore() {
+    this.score += 1
+    this.scoreDisplay.string = 'Score: ' + this.score
+    cc.audioEngine.playEffect(this.scoreAudio, false)
+  },
+
+  gameOver() {
+    this.player.stopAllActions()
+    cc.director.loadScene('game')
+  }
 })
