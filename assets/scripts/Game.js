@@ -7,7 +7,7 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-const Player = require('Player')
+const Player = require('PurpleMonster')
 const ScoreFX = require('ScoreFX')
 const Star = require('Star')
 
@@ -145,11 +145,50 @@ cc.Class({
   },
 
   getNewStarPosition() {
+    if (!this.currentStar) {
+      this.currentStarX = (Math.random() - 0.5) * 2 * this.node.width / 2
+    }
+
     var randX = 0
-    var randY = this.groundY + Math.random() * this.player.getComponent('PurpleMonster').jumpHeight + 50
+    var randY = this.groundY + Math.random() * this.player.jumpHeight + 50
     var maxX = this.node.width / 2
-    randX = (Math.random() - 0.5) * 2 * maxX
+    if (this.currentStarX >= 0) {
+      randX = -Math.random() * maxX
+    } else {
+      randX = Math.random() * maxX
+    }
+    this.currentStarX = randX
     return cc.v2(randX, randY)
+  },
+
+  gainScore(pos) {
+    this.score += 1
+    this.scoreDisplay.string = 'Score: ' + this.score
+
+    var fx = this.spawnScoreFX()
+    this.node.addChild(fx.node)
+    fx.node.setPosition(pos)
+    fx.play()
+
+    cc.audioEngine.playEffect(this.scoreAudio, false)
+  },
+  resetScore() {
+    this.score = 0
+    this.scoreDisplay.string = 'Score: ' + this.score.toString()
+  },
+  spawnScoreFX() {
+    var fx
+    if (this.scorePool.size() > 0) {
+      fx = this.scorePool.get()
+      return fx.getComponent('ScoreFX')
+    } else {
+      fx = cc.instantiate(this.scoreFXPrefab).getComponent('ScoreFX')
+      fx.init(this)
+      return fx
+    }
+  },
+  despawnScoreFX(scoreFX) {
+    this.scorePool.put(scoreFX)
   },
 
   start() {
@@ -159,20 +198,18 @@ cc.Class({
   update(dt) {
     if (this.timer > this.starDuration) {
       this.gameOver()
+      this.enabled = false
       return
     }
 
     this.timer += dt
   },
 
-  gainScore() {
-    this.score += 1
-    this.scoreDisplay.string = 'Score: ' + this.score
-    cc.audioEngine.playEffect(this.scoreAudio, false)
-  },
-
   gameOver() {
-    this.player.stopAllActions()
-    cc.director.loadScene('game')
+    this.gameOverNode.active = true
+    this.player.enabled = false
+    this.player.stopMove()
+    this.currentStar.destroy()
+    this.btnNode.x = 0
   }
 })

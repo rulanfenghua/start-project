@@ -33,7 +33,18 @@ cc.Class({
 
   // LIFE-CYCLE CALLBACKS:
 
-  // onLoad () {},
+  onLoad() {
+    this.enabled = false
+  },
+
+  init(game) {
+    this.game = game
+    this.enabled = true
+    this.node.opacity = 255
+  },
+  reuse(game) {
+    this.init(game)
+  },
 
   getPlayerDistance() {
     var playerPos = this.game.player.getPosition()
@@ -42,11 +53,10 @@ cc.Class({
   },
 
   onPicked() {
-    this.game.spawnNewStar()
+    var pos = this.node.getPosition()
+    this.game.gainScore(pos)
 
-    this.game.gainScore()
-
-    this.node.destroy()
+    this.game.despawnStar(this.node)
   },
 
   start() {
