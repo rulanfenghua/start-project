@@ -47,7 +47,7 @@ cc.Class({
   },
 
   getPlayerDistance() {
-    var playerPos = this.game.player.getPosition()
+    var playerPos = this.game.player.getCenterPos()
     var dist = this.node.position.sub(playerPos).mag()
     return dist
   },

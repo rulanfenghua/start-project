@@ -55,8 +55,8 @@ cc.Class({
     // 主角当前水平方向速度
     this.xSpeed = 0
 
-    this.minPosx = -this.node.parent.width / 2
-    this.maxPosx = this.node.parent.width / 2
+    this.minPosX = -this.node.parent.width / 2
+    this.maxPosX = this.node.parent.width / 2
 
     // 初始化跳跃动作
     this.jumpAction = this.setJumpAction()
@@ -71,7 +71,7 @@ cc.Class({
   },
   onDestroy() {
     // 取消键盘输入监听
-    cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.offKeyDown, this)
+    cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this)
     cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this)
 
     var touchReceiver = cc.Canvas.instance.node
@@ -80,6 +80,7 @@ cc.Class({
   },
 
   onKeyDown(event) {
+    console.log(1)
     switch (event.keyCode) {
       case cc.macro.KEY.a:
       case cc.macro.KEY.left:
@@ -106,6 +107,7 @@ cc.Class({
     }
   },
   onTouchStart(event) {
+    console.log(2)
     var touchLoc = event.getLocation()
     if (touchLoc.x >= cc.winSize.width / 2) {
       this.accRight = true
@@ -126,12 +128,11 @@ cc.Class({
     // 下落
     var jumpDown = cc.moveBy(this.jumpDuration, cc.v2(0, -this.jumpHeight)).easing(cc.easeCubicActionIn())
     // 形变
-    var squash = cc.scaleto(this.squashDuration, 1, 0.6)
+    var squash = cc.scaleTo(this.squashDuration, 1, 0.6)
     var stretch = cc.scaleTo(this.squashDuration, 1, 1.2)
     var scaleBack = cc.scaleTo(this.squashDuration, 1, 1)
 
     var callback = cc.callFunc(this.playJumpSound, this)
-
     // 不断重复
     return cc.repeatForever(cc.sequence(squash, stretch, jumpUp, jumpDown, scaleBack, callback))
   },
@@ -146,7 +147,7 @@ cc.Class({
   startMoveAt(pos) {
     this.enabled = true
     this.xSpeed = 0
-    this.node.setPostion(pos)
+    this.node.setPosition(pos)
     this.node.runAction(this.setJumpAction())
   },
   stopMove() {
