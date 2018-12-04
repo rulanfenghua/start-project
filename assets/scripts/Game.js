@@ -69,6 +69,10 @@ cc.Class({
       default: null,
       type: cc.Node
     },
+    hintLabel: {
+      default: null,
+      type: cc.Node
+    },
     controlHintLabel: {
       default: null,
       type: cc.Label
@@ -101,9 +105,17 @@ cc.Class({
 
     this.starPool = new cc.NodePool('Star')
     this.scorePool = new cc.NodePool('ScoreFX')
+
+    // instruction标识变量
+    this.instructionSymbol = true
   },
 
   onStartGame() {
+    if (this.instructionSymbol) {
+      this.hintLabel.getComponent(cc.Animation).play('instruction')
+      this.instructionSymbol = false
+    }
+
     this.resetScore()
     this.enabled = true
     this.btnNode.x = 3000

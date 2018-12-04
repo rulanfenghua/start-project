@@ -80,7 +80,6 @@ cc.Class({
   },
 
   onKeyDown(event) {
-    console.log(1)
     switch (event.keyCode) {
       case cc.macro.KEY.a:
       case cc.macro.KEY.left:
@@ -107,9 +106,9 @@ cc.Class({
     }
   },
   onTouchStart(event) {
-    console.log(2)
     var touchLoc = event.getLocation()
-    if (touchLoc.x >= cc.winSize.width / 2) {
+    var vec2 = this.node.convertToWorldSpaceAR(this.node.position)
+    if (touchLoc.x >= vec2.x) {
       this.accRight = true
       this.accLeft = false
     } else {
